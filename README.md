@@ -1,159 +1,108 @@
-# 📝 Online Complaint Registration System
+# 📌 Online Complaint System (MERN Stack)
 
-A full-stack web application that enables users to register, manage, and track complaints through a simple and user-friendly interface.
+A full-stack web application for managing and tracking complaints. Built using the MERN stack (MongoDB, Express, React, Node.js) with secure authentication and role-based access control.
 
 ---
 
 ## 🚀 Features
 
-* 📝 Register complaints online
-* 📋 View submitted complaints
-* 🔍 Track complaint status
-* ✏️ Update complaint information
-* 🗑️ Delete complaints
-* 📱 Responsive user interface
-* 🔗 Frontend and backend integration
-* 💾 Database-driven complaint management
+### 👤 User Features
+- User registration and login (JWT authentication)
+- Submit complaints with details
+- View complaint status (Pending / In Progress / Resolved)
+- User dashboard to track submitted complaints
+
+### 🛠️ Admin Features
+- Secure admin login access
+- View all user complaints
+- Update complaint status
+- Admin dashboard with analytics:
+  - Total complaints
+  - Pending / In Progress / Resolved counts
+  - Category-wise complaint breakdown
+  - Recent complaints list
 
 ---
 
-## 🛠️ Tech Stack
-
-### Frontend
-
-* React.js
-* Vite
-* HTML5
-* CSS3
-* JavaScript
-
-### Backend
-
-* Node.js
-* Express.js
-
-### Database
-
-* MongoDB
-
-### Tools
-
-* Git
-* GitHub
-* Antigravity IDE
+## 🔐 Authentication & Security
+- JWT-based authentication system
+- Role-based access control (User / Admin)
+- Protected routes for admin dashboard
+- Secure password hashing using bcrypt
 
 ---
 
-## 📂 Project Structure
+## 🧑‍💻 Tech Stack
 
-```text
-online-complaint-registration/
-│
-├── frontend/
-│   ├── src/
-│   ├── public/
-│   ├── package.json
-│   └── vite.config.js
-│
-├── backend/
-│   ├── server.js
-│   ├── package.json
-│   └── ...
-│
-└── README.md
-```
+Frontend:
+- React.js (Vite)
+- React Router
+- Axios
+- CSS / Bootstrap
+
+Backend:
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- JWT Authentication
+- bcrypt.js
 
 ---
 
-## ⚙️ Installation
-
-### Clone the repository
-
-```bash
-git clone https://github.com/satish-goud/online-complaint-registration.git
-```
-
-### Navigate to the project
-
-```bash
-cd online-complaint-registration
-```
-
-### Install frontend dependencies
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-### Install backend dependencies
-
-```bash
-cd ../backend
-npm install
-npm start
-```
+## 📊 Admin Dashboard
+- Real-time complaint statistics
+- Status tracking system
+- Category-wise analytics
+- Recent complaint monitoring
 
 ---
 
-## ▶️ Running the Application
+## ⚙️ Installation & Setup
 
-Start the frontend:
+1. Clone repository:
+git clone https://github.com/your-username/your-repo-name.git
 
-```bash
-cd frontend
-npm run dev
-```
-
-Start the backend:
-
-```bash
+2. Backend setup:
 cd backend
-npm start
-```
+npm install
+npm run dev
 
-The application will typically be available at:
+Create .env file:
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+PORT=5000
 
-```
-http://localhost:5173
-```
-
----
-
-## 🔮 Future Enhancements
-
-* User Authentication
-* Admin Dashboard
-* Email Notifications
-* Complaint Status Updates
-* File Upload Support
-* Search and Filter Functionality
-* Analytics Dashboard
+3. Frontend setup:
+cd frontend
+npm install
+npm run dev
 
 ---
 
-## 🤝 Contributing
+## 🌐 Run Project
+Frontend: http://localhost:5173  
+Backend: http://localhost:5000  
 
-Contributions and suggestions are welcome.
+---
 
-1. Fork the repository
-2. Create a new branch
-3. Commit your changes
-4. Push to your branch
-5. Open a Pull Request
+## 📁 Project Structure
+project-root/
+├── frontend/
+├── backend/
+├── README.md
+
+---
+
+## 🧠 Future Improvements
+- Email notifications for complaints
+- File upload support
+- Advanced charts (Chart.js / Recharts)
+- Deployment (Vercel + Render)
+- Mobile responsive UI
 
 ---
 
 ## 👨‍💻 Author
-
-**Satish Goud**
-
-GitHub: https://github.com/satish-goud
-
----
-
-## 📄 License
-
-This project is created for educational and learning purposes.
-
+Your Name  
+GitHub: https://github.com/your-username
