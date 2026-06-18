@@ -1,105 +1,87 @@
-# 📌 Online Complaint System (MERN Stack)
+📢 Online Complaint Registration System
 
-A full-stack web application for managing and tracking complaints. Built using the MERN stack (MongoDB, Express, React, Node.js) with secure authentication and role-based access control.
+A full-stack web application that allows users to register, track, and manage complaints online. Built using the MERN stack and deployed on cloud platforms.
 
----
+🌐 Live Demo
 
-## 🚀 Features
+👉 Frontend: https://online-complaint-registration-ashy.vercel.app/
+👉 Backend API: https://online-complaint-backend.onrender.com
 
-### 👤 User Features
-- User registration and login (JWT authentication)
-- Submit complaints with details
-- View complaint status (Pending / In Progress / Resolved)
-- User dashboard to track submitted complaints
-
-### 🛠️ Admin Features
-- Secure admin login access
-- View all user complaints
-- Update complaint status
-- Admin dashboard with analytics:
-  - Total complaints
-  - Pending / In Progress / Resolved counts
-  - Category-wise complaint breakdown
-  - Recent complaints list
-
----
-
-## 🔐 Authentication & Security
-- JWT-based authentication system
-- Role-based access control (User / Admin)
-- Protected routes for admin dashboard
-- Secure password hashing using bcrypt
-
----
-
-## 🧑‍💻 Tech Stack
+🚀 Features
+📝 User can submit complaints online
+🔍 View complaint status
+📂 Organized complaint records
+⚡ REST API backend
+🌍 Fully deployed on cloud
+🔐 MongoDB Atlas integration
+🛠️ Tech Stack
 
 Frontend:
-- React.js (Vite)
-- React Router
-- Axios
-- CSS / Bootstrap
+
+React (Vite)
+Axios
+HTML, CSS, JavaScript
 
 Backend:
-- Node.js
-- Express.js
-- MongoDB Atlas
-- Mongoose
-- JWT Authentication
-- bcrypt.js
 
----
+Node.js
+Express.js
+MongoDB Atlas
+Mongoose
 
-## 📊 Admin Dashboard
-- Real-time complaint statistics
-- Status tracking system
-- Category-wise analytics
-- Recent complaint monitoring
+Deployment:
 
----
+Frontend: Vercel
+Backend: Render
+Database: MongoDB Atlas
+📁 Project Structure
+frontend/
+  ├── src/
+  ├── components/
+  ├── pages/
+  └── axios.js
 
-## ⚙️ Installation & Setup
+backend/
+  ├── models/
+  ├── routes/
+  ├── controllers/
+  └── server.js
+⚙️ Installation (For Local Setup)
 
-1. Clone repository:
-git clone https://github.com/your-username/your-repo-name.git
+1. Clone repo
+git clone https://github.com/your-username/your-repo.git
 
-2. Backend setup:
+2. Setup backend
 cd backend
 npm install
-npm run dev
+npm start
 
 Create .env file:
+
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
 PORT=5000
 
-3. Frontend setup:
+3. Setup frontend
 cd frontend
 npm install
 npm run dev
 
----
+Create .env file:
 
-## 🌐 Run Project
-Frontend: http://localhost:5173  
-Backend: http://localhost:5000  
+VITE_API_URL=http://localhost:5000/api
+🌍 Environment Variables (Production)
+VITE_API_URL=https://online-complaint-backend.onrender.com/api
 
----
 
-## 📁 Project Structure
-project-root/
-├── frontend/
-├── backend/
-├── README.md
+⭐ Future Improvements
+JWT Authentication
+Admin dashboard
+Email notifications
+Better UI/UX
+Complaint categories & filters
+📌 Status
 
----
-
-## 🧠 Future Improvements
-- Email notifications for complaints
-- File upload support
-- Advanced charts (Chart.js / Recharts)
-- Deployment (Vercel + Render)
-- Mobile responsive UI
-
+✔ Fully deployed and working
+✔ Production-ready full st
 
 
