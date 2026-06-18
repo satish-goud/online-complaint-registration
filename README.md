@@ -101,8 +101,5 @@ project-root/
 - Deployment (Vercel + Render)
 - Mobile responsive UI
 
----
 
-## 👨‍💻 Author
-Your Name  
-GitHub: https://github.com/your-username
+
