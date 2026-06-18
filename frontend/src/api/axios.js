@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const baseURL = import.meta.env.VITE_API_URL || "https://online-complaint-backend-y2ih.onrender.com/api";
+
 const api = axios.create({
-  baseURL: "https://online-complaint-backend-y2ih.onrender.com/api",
+  baseURL: baseURL,
 });
 
 api.interceptors.request.use((config) => {

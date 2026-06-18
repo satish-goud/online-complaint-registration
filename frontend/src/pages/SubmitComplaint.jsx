@@ -26,6 +26,29 @@ const SubmitComplaint = () => {
     setLoading(true);
     setAlert({ show: false, type: '', message: '' });
 
+    // Client-side validation
+    if (!formData.title.trim() || !formData.description.trim() || !formData.reporterName.trim() || !formData.reporterEmail.trim()) {
+      setAlert({
+        show: true,
+        type: 'danger',
+        message: 'All fields are required',
+      });
+      setLoading(false);
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.reporterEmail)) {
+      setAlert({
+        show: true,
+        type: 'danger',
+        message: 'Please enter a valid email address',
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await api.post('/complaints', formData);
       if (response.data.success) {
