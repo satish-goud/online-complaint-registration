@@ -1,8 +1,12 @@
 import Complaint from '../models/Complaint.js';
 
-// @desc    Register a new complaint
-// @route   POST /api/complaints
-// @access  Public
+const buildUserFilter = (user) => {
+  if (user.role === 'admin' || user.role === 'agent') {
+    return {};
+  }
+  return { userId: user.id };
+};
+
 export const createComplaint = async (req, res) => {
   try {
     const { title, description, category, priority, reporterName, reporterEmail } = req.body;
@@ -14,6 +18,7 @@ export const createComplaint = async (req, res) => {
       priority,
       reporterName,
       reporterEmail,
+      userId: req.user.id,
     });
 
     res.status(201).json({
@@ -29,13 +34,10 @@ export const createComplaint = async (req, res) => {
   }
 };
 
-// @desc    Get all complaints
-// @route   GET /api/complaints
-// @access  Public
 export const getComplaints = async (req, res) => {
   try {
     const { status, category } = req.query;
-    const filter = {};
+    const filter = buildUserFilter(req.user);
 
     if (status) filter.status = status;
     if (category) filter.category = category;
@@ -55,12 +57,32 @@ export const getComplaints = async (req, res) => {
   }
 };
 
-// @desc    Get single complaint by ID
-// @route   GET /api/complaints/:id
-// @access  Public
+export const getComplaintStats = async (req, res) => {
+  try {
+    const filter = buildUserFilter(req.user);
+    const complaints = await Complaint.find(filter);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        total: complaints.length,
+        pending: complaints.filter((c) => c.status === 'Pending').length,
+        progress: complaints.filter((c) => c.status === 'In Progress').length,
+        resolved: complaints.filter((c) => c.status === 'Resolved').length,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server Error: ' + error.message,
+    });
+  }
+};
+
 export const getComplaintById = async (req, res) => {
   try {
-    const complaint = await Complaint.findById(req.params.id);
+    const filter = { _id: req.params.id, ...buildUserFilter(req.user) };
+    const complaint = await Complaint.findOne(filter);
 
     if (!complaint) {
       return res.status(404).json({
@@ -81,14 +103,11 @@ export const getComplaintById = async (req, res) => {
   }
 };
 
-// @desc    Update complaint status/priority
-// @route   PUT /api/complaints/:id
-// @access  Public
 export const updateComplaint = async (req, res) => {
   try {
     const { status, priority } = req.body;
 
-    let complaint = await Complaint.findById(req.params.id);
+    const complaint = await Complaint.findById(req.params.id);
 
     if (!complaint) {
       return res.status(404).json({
@@ -97,7 +116,6 @@ export const updateComplaint = async (req, res) => {
       });
     }
 
-    // Update fields if provided
     if (status) complaint.status = status;
     if (priority) complaint.priority = priority;
 
@@ -116,9 +134,6 @@ export const updateComplaint = async (req, res) => {
   }
 };
 
-// @desc    Delete a complaint
-// @route   DELETE /api/complaints/:id
-// @access  Public
 export const deleteComplaint = async (req, res) => {
   try {
     const complaint = await Complaint.findById(req.params.id);

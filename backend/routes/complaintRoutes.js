@@ -5,17 +5,21 @@ import {
   getComplaintById,
   updateComplaint,
   deleteComplaint,
+  getComplaintStats,
 } from '../controllers/complaintController.js';
+import { protect, authorize } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+router.get('/stats', protect, getComplaintStats);
+
 router.route('/')
-  .post(createComplaint)
-  .get(getComplaints);
+  .post(protect, createComplaint)
+  .get(protect, getComplaints);
 
 router.route('/:id')
-  .get(getComplaintById)
-  .put(updateComplaint)
-  .delete(deleteComplaint);
+  .get(protect, getComplaintById)
+  .put(protect, authorize('admin', 'agent'), updateComplaint)
+  .delete(protect, authorize('admin'), deleteComplaint);
 
 export default router;

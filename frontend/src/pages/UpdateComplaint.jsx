@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
 const UpdateComplaint = () => {
@@ -19,7 +19,7 @@ const UpdateComplaint = () => {
   useEffect(() => {
     const fetchComplaint = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/complaints/${id}`);
+        const response = await api.get(`/complaints/${id}`);
         if (response.data.success) {
           setComplaint(response.data.data);
           setStatus(response.data.data.status);
@@ -41,7 +41,7 @@ const UpdateComplaint = () => {
     setAlert({ show: false, type: '', message: '' });
 
     try {
-      const response = await axios.put(`http://localhost:5000/api/complaints/${id}`, {
+      const response = await api.put(`/complaints/${id}`, {
         status,
         priority,
       });
@@ -53,7 +53,7 @@ const UpdateComplaint = () => {
           message: 'Complaint status updated successfully! Redirecting back...',
         });
         setTimeout(() => {
-          navigate('/');
+          navigate('/complaints');
         }, 1800);
       }
     } catch (err) {
@@ -95,7 +95,7 @@ const UpdateComplaint = () => {
           <i className="bi bi-exclamation-octagon fs-1 text-danger mb-3 d-inline-block"></i>
           <h4>Unable to find complaint</h4>
           <p className="text-secondary mb-4">{error || 'The requested complaint record does not exist.'}</p>
-          <Link to="/" className="btn btn-premium">
+          <Link to="/complaints" className="btn btn-premium">
             <i className="bi bi-arrow-left me-2"></i>Back to Dashboard
           </Link>
         </div>
@@ -108,7 +108,7 @@ const UpdateComplaint = () => {
       <div className="row justify-content-center">
         <div className="col-lg-8">
           <div className="mb-4">
-            <Link to="/" className="text-secondary text-decoration-none d-inline-flex align-items-center gap-2 hover-text-white">
+            <Link to="/complaints" className="text-secondary text-decoration-none d-inline-flex align-items-center gap-2 hover-text-white">
               <i className="bi bi-arrow-left"></i> Back to Dashboard
             </Link>
           </div>
@@ -230,7 +230,7 @@ const UpdateComplaint = () => {
 
                   <div className="col-12 mt-5">
                     <div className="d-flex gap-3">
-                      <Link to="/" className="btn btn-outline-secondary w-50 py-3 rounded-3">
+                      <Link to="/complaints" className="btn btn-outline-secondary w-50 py-3 rounded-3">
                         Cancel
                       </Link>
                       <button

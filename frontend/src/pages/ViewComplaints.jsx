@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { Link } from 'react-router-dom';
 
 const ViewComplaints = () => {
+  const role = localStorage.getItem('role');
+  const canManage = role === 'admin' || role === 'agent';
+
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Filtering states
   const [statusFilter, setStatusFilter] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Stats counters
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -22,29 +23,22 @@ const ViewComplaints = () => {
 
   const fetchComplaints = async () => {
     setLoading(true);
+    setError('');
     try {
-      // Build API query parameters
-      let url = 'http://localhost:5000/api/complaints';
       const params = {};
       if (statusFilter) params.status = statusFilter;
       if (categoryFilter) params.category = categoryFilter;
 
-      const response = await axios.get(url, { params });
-      if (response.data.success) {
-        setComplaints(response.data.data);
-        
-        // Calculate statistics based on total unfiltered records
-        // If we are applying filters, we still fetch all records to calculate dashboard stats
-        const allResponse = await axios.get('http://localhost:5000/api/complaints');
-        if (allResponse.data.success) {
-          const allData = allResponse.data.data;
-          setStats({
-            total: allData.length,
-            pending: allData.filter((c) => c.status === 'Pending').length,
-            progress: allData.filter((c) => c.status === 'In Progress').length,
-            resolved: allData.filter((c) => c.status === 'Resolved').length,
-          });
-        }
+      const [complaintsRes, statsRes] = await Promise.all([
+        api.get('/complaints', { params }),
+        api.get('/complaints/stats'),
+      ]);
+
+      if (complaintsRes.data.success) {
+        setComplaints(complaintsRes.data.data);
+      }
+      if (statsRes.data.success) {
+        setStats(statsRes.data.data);
       }
     } catch (err) {
       setError('Failed to load complaints. Please verify the backend is running.');
@@ -57,7 +51,18 @@ const ViewComplaints = () => {
     fetchComplaints();
   }, [statusFilter, categoryFilter]);
 
-  // Handle local searching by title/reporter email
+  const handleDelete = async (id) => {
+    if (role !== 'admin') return;
+    if (!window.confirm('Are you sure you want to delete this complaint?')) return;
+
+    try {
+      await api.delete(`/complaints/${id}`);
+      fetchComplaints();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to delete complaint');
+    }
+  };
+
   const filteredComplaints = complaints.filter((c) => {
     const term = searchTerm.toLowerCase();
     return (
@@ -67,7 +72,6 @@ const ViewComplaints = () => {
     );
   });
 
-  // Dynamic badge selectors
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Pending': return 'badge-pending';
@@ -89,7 +93,6 @@ const ViewComplaints = () => {
 
   return (
     <div className="container py-5">
-      {/* Header Summary Cards */}
       <div className="row g-4 mb-5">
         <div className="col-md-3">
           <div className="glass-card p-4 text-center">
@@ -117,7 +120,6 @@ const ViewComplaints = () => {
         </div>
       </div>
 
-      {/* Filters and Controls */}
       <div className="glass-card p-4 mb-4">
         <div className="row g-3">
           <div className="col-lg-4 col-md-12">
@@ -162,14 +164,13 @@ const ViewComplaints = () => {
             </select>
           </div>
           <div className="col-lg-2 col-md-12">
-            <button className="btn btn-premium w-100 h-100" onClick={fetchComplaints}>
+            <button type="button" className="btn btn-premium w-100 h-100" onClick={fetchComplaints}>
               <i className="bi bi-arrow-clockwise me-1"></i> Refresh
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main List Table */}
       <div className="glass-card p-4 overflow-hidden">
         {loading ? (
           <div className="text-center py-5">
@@ -243,9 +244,22 @@ const ViewComplaints = () => {
                       })}
                     </td>
                     <td className="text-end pe-3">
-                      <Link to={`/update/${complaint._id}`} className="btn btn-sm btn-outline-light border-secondary border-opacity-50 py-1.5 px-3 rounded-3 hover-btn-white">
-                        <i className="bi bi-pencil-square me-1"></i> Update Status
-                      </Link>
+                      {canManage && (
+                        <>
+                          <Link to={`/update/${complaint._id}`} className="btn btn-sm btn-outline-light border-secondary border-opacity-50 py-1.5 px-3 rounded-3 me-1">
+                            <i className="bi bi-pencil-square me-1"></i> Update
+                          </Link>
+                          {role === 'admin' && (
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-outline-danger py-1.5 px-3 rounded-3"
+                              onClick={() => handleDelete(complaint._id)}
+                            >
+                              <i className="bi bi-trash me-1"></i> Delete
+                            </button>
+                          )}
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))}

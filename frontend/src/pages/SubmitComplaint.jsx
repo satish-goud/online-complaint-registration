@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 const SubmitComplaint = () => {
@@ -27,7 +27,7 @@ const SubmitComplaint = () => {
     setAlert({ show: false, type: '', message: '' });
 
     try {
-      const response = await axios.post('http://localhost:5000/api/complaints', formData);
+      const response = await api.post('/complaints', formData);
       if (response.data.success) {
         setAlert({
           show: true,
@@ -43,7 +43,7 @@ const SubmitComplaint = () => {
           reporterEmail: '',
         });
         setTimeout(() => {
-          navigate('/');
+          navigate('/complaints');
         }, 2000);
       }
     } catch (error) {

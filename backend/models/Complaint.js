@@ -39,6 +39,10 @@ const complaintSchema = new mongoose.Schema(
         'Please add a valid email address',
       ],
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,
