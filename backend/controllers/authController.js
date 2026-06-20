@@ -93,3 +93,48 @@ export const loginUser = async (req, res) => {
     });
   }
 };
+
+export const createAdmin = async (req, res) => {
+  try {
+    const { fullName, email, password, mobile } = req.body;
+
+    if (!fullName || !email || !password) {
+      return res.status(400).json({ message: 'Full name, email, and password are required' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+    }
+
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      name: fullName,
+      email,
+      password: hashedPassword,
+      mobile: mobile || undefined,
+      role: 'admin',
+    });
+
+    res.status(201).json({
+      message: 'Admin created successfully',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Admin creation failed',
+      error: error.message,
+    });
+  }
+};
